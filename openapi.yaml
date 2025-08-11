@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: Binance Agent API
+  version: 1.0.0
+servers:
+  - url: https://binance-agent.onrender.com
+paths:
+  /ping:
+    get:
+      summary: Vérifie que le serveur est en ligne
+      responses:
+        "200":
+          description: Pong message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: pong
+
+  /price:
+    get:
+      summary: Récupère le prix actuel d'une paire
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          schema:
+            type: string
+          example: BTCUSDT
+      responses:
+        "200":
+          description: Prix de la paire
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  symbol:
+                    type: string
+                  price:
+                    type: number
+
+  /balance:
+    get:
+      summary: Récupère les soldes du compte
+      responses:
+        "200":
+          description: Liste des soldes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balances:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        asset:
+                          type: string
+                        free:
+                          type: number
+                        locked:
+                          type: number
+
+  /trade:
+    post:
+      summary: Passe un ordre d'achat ou de vente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                symbol:
+                  type: string
+                  example: BTCUSDT
+                side:
+                  type: string
+                  enum: [BUY, SELL]
+                quantity:
+                  type: number
+      responses:
+        "200":
+          description: Détails de l'ordre exécuté
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: integer
+                  status:
+                    type: string

@@ -1,3 +1,19 @@
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+
+# CORS (une fois suffit)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/openapi.yaml")
+def get_openapi_yaml():
+    return FileResponse("openapi.yaml", media_type="application/yaml")
+
 import os, time, hmac, hashlib
 from urllib.parse import urlencode
 from typing import Optional, Literal
